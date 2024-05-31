@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const LandingMain = () => {
   return (
@@ -38,9 +39,11 @@ const LandingMain = () => {
         <p className="text-2xl">Où que vous soyez. Annulez à tout moment.</p>
         <div className="flex items-center justify-center gap-5 bg-black/70 rounded p-5">
           <p className="text-2xl">Prêt à regarder Netflix ?</p>
-          <button className="bg-red-600 px-6 py-2 rounded cursor-pointer text-2xl">
-            S'inscrire
-          </button>
+          <Link to="/inscription">
+            <button className="bg-red-600 px-6 py-2 rounded cursor-pointer text-2xl">
+              S'inscrire
+            </button>
+          </Link>
         </div>
       </div>
       Ï
