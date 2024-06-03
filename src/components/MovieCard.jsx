@@ -17,18 +17,30 @@ const MovieCard = ({ movie, inAccount }) => {
     if (myMoviesFiltered?.length > 0) setSaved(true);
   };
 
-  const movieID = doc(db, "users", `${user?.email}`);
-  const handleSsaveMovie = async () => {
-    setLike(!like);
+  const movieDocRef = doc(db, "users", `${user?.email}`);
 
-    //Ajouter le movie dans la BDD
-    await updateDoc(movieID, {
-      savedMovies: arrayUnion({
-        id: movie.id,
-        title: movie.title,
-        img: movie.backdrop_path,
-      }),
-    });
+  const handleSaveMovie = async () => {
+    setLike(!like);
+    const myMoviesFiltered = myMovies?.filter(
+      (movieInDB) => movieInDB.title === movie.title
+    );
+    //Supprimer le movie si déjà dans la BDD
+    if (myMoviesFiltered?.length > 0) {
+      const myMoviesUpdated = [...myMovies];
+      myMoviesUpdated.filter((movieInDB) => !(movieInDB.title === movie.title));
+      await updateDoc(movieDocRef, {
+        savedMovies: myMoviesUpdated,
+      });
+    } else {
+      //Ajouter le movie dans la BDD si pas déjà liké
+      await updateDoc(movieDocRef, {
+        savedMovies: arrayUnion({
+          id: movie.id,
+          title: movie.title,
+          img: movie.backdrop_path,
+        }),
+      });
+    }
   };
 
   useEffect(() => {
@@ -51,7 +63,7 @@ const MovieCard = ({ movie, inAccount }) => {
         <p className="whitespace-normal text-xs md:text-sm font-black flex justify-center items-center h-full text-center">
           {movie.title}
         </p>
-        <p onClick={handleSsaveMovie}>
+        <p onClick={handleSaveMovie}>
           {saved || like ? (
             <FaHeart className="absolute top-4 left-4 text-red-500" />
           ) : (
