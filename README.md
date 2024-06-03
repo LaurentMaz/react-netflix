@@ -1,8 +1,7 @@
 # React + Vite
 
 - Tailwind CSS
-- FIREBASE
-- React Context
+- FIREBASE Authentication
 - React Router
 - Protected routes
 - Data Fetching from API

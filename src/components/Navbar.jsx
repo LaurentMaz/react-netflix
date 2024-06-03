@@ -24,7 +24,7 @@ const Navbar = () => {
       </Link>
       {user?.email ? (
         <div>
-          <Link to="/account">
+          <Link to="/compte">
             <button className="pr-4">Compte</button>
           </Link>
           <button

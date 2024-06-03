@@ -2,15 +2,21 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import MovieCard from "./MovieCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { UserAuth } from "../context/AuthContext";
 
-const Row = ({ title, fetchURL }) => {
+const Row = ({ title, fetchURL = "", accountRow = false }) => {
+  const { user, myMovies } = UserAuth();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios.get(fetchURL).then((response) => {
-      setMovies(response.data.results);
-    });
-  }, [fetchURL]);
+    if (!accountRow) {
+      axios.get(fetchURL).then((response) => {
+        setMovies(response.data.results);
+      });
+    } else {
+      setMovies(myMovies);
+    }
+  }, [fetchURL, user?.email]);
 
   const sliderRef = useRef(null);
 
@@ -39,8 +45,13 @@ const Row = ({ title, fetchURL }) => {
           id={"slider"}
           className="w-full h-full overflow-x-scroll whitespace-nowrap scroll-smooth scrollbar-hide relative"
         >
-          {movies.map((movie, index) => (
-            <MovieCard key={movie.id} movie={movie} index={index} />
+          {(accountRow ? myMovies : movies).map((movie, index) => (
+            <MovieCard
+              key={movie.id}
+              movie={movie}
+              index={index}
+              inAccount={accountRow}
+            />
           ))}
         </div>
         <MdChevronRight

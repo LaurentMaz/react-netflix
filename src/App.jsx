@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Inscription from "./pages/Inscription";
 import Account from "./pages/Account";
 import LandingMain from "./pages/Landing-main";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -15,10 +16,24 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<LandingMain />} />
-          <Route path="/home" element={<Home />} />
+          <Route
+            path="/home"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/inscription" element={<Inscription />} />
-          <Route path="/compte" element={<Account />} />
+          <Route
+            path="/compte"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </AuthContextProvider>
     </>

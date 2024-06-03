@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InscriptionView from "../Views/Inscription-view";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
 
 const InscriptionModel = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +16,17 @@ const InscriptionModel = () => {
     e.preventDefault();
     try {
       await signUp(email, password);
-      navigate("/home");
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    // Vérifier l'état de l'authentification et rediriger l'utilisateur si authentifié
+    if (user?.email) {
+      navigate("/home"); // Rediriger si l'utilisateur est authentifié
+    }
+  }, [user, navigate]);
 
   return (
     <InscriptionView

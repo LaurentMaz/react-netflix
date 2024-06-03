@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const LoginModel = ({}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { user, logIn } = UserAuth();
 
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const LoginModel = ({}) => {
       navigate("/home");
     } catch (error) {
       console.log(error);
+      setError(error.message);
     }
   };
   return (
@@ -25,6 +27,7 @@ const LoginModel = ({}) => {
         setEmail={setEmail}
         setPassword={setPassword}
         handleSubmit={handleSubmit}
+        error={error}
       />
     </>
   );

@@ -46,7 +46,6 @@ const LandingMain = () => {
           </Link>
         </div>
       </div>
-      Ï
     </>
   );
 };

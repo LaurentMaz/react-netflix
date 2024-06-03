@@ -1,7 +1,8 @@
 import React from "react";
+import AccountModel from "../Models/Account-model";
 
 const Account = () => {
-  return <div></div>;
+  return <AccountModel />;
 };
 
 export default Account;

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const LoginView = ({ setEmail, setPassword, handleSubmit }) => {
+const LoginView = ({ setEmail, setPassword, handleSubmit, error }) => {
   return (
     <>
       <div className="w-full h-screen">
@@ -18,6 +18,7 @@ const LoginView = ({ setEmail, setPassword, handleSubmit }) => {
           <div className="max-w-[450px] h-[600px] mx-auto bg-black/75 rounded-[15px]">
             <div className="max-w-[320px] mx-auto py-16">
               <h1 className="text-3xl font-bold">Connexion</h1>
+              {error ? <p className="p-3 bg-red-400">{error}</p> : null}
               <form
                 onSubmit={handleSubmit}
                 className="w-full flex flex-col py-4"
