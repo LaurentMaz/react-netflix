@@ -1,5 +1,7 @@
 # React + Vite
 
+Live preview : [https://netflix-react-673f5.web.app](https://netflix-react-673f5.web.app)
+
 - Tailwind CSS
 - FIREBASE Authentication
 - React Router
