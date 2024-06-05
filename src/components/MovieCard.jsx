@@ -26,12 +26,16 @@ const MovieCard = ({ movie, inAccount }) => {
     );
     //Supprimer le movie si déjà dans la BDD
     if (myMoviesFiltered?.length > 0) {
-      const myMoviesUpdated = [...myMovies];
-      myMoviesUpdated.filter((movieInDB) => !(movieInDB.title === movie.title));
+      setSaved(false);
+      let myMoviesUpdated = [...myMovies];
+      myMoviesUpdated = myMoviesUpdated.filter(
+        (movieInDB) => !(movieInDB.title === movie.title)
+      );
       await updateDoc(movieDocRef, {
         savedMovies: myMoviesUpdated,
       });
     } else {
+      setSaved(true);
       //Ajouter le movie dans la BDD si pas déjà liké
       await updateDoc(movieDocRef, {
         savedMovies: arrayUnion({
@@ -64,7 +68,7 @@ const MovieCard = ({ movie, inAccount }) => {
           {movie.title}
         </p>
         <p onClick={handleSaveMovie}>
-          {saved || like ? (
+          {saved ? (
             <FaHeart className="absolute top-4 left-4 text-red-500" />
           ) : (
             <FaRegHeart className="absolute top-4 left-4 text-gray-300 hover:text-red-500" />
