@@ -17,9 +17,15 @@ export function AuthContextProvider({ children }) {
 
   const getMovies = async () => {
     //Récupération des données en BDD
-    const docSnap = await getDoc(docRef);
-    const results = docSnap.data()?.savedMovies;
-    setMyMovies(results);
+    if (user) {
+      try {
+        const docSnap = await getDoc(docRef);
+        const results = docSnap.data()?.savedMovies;
+        setMyMovies(results);
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    }
   };
 
   function signUp(email, password) {
@@ -37,15 +43,21 @@ export function AuthContextProvider({ children }) {
     return signOut(auth);
   }
 
+  //Effect for authentication state change
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-    getMovies();
+
     return () => {
-      unsubscribe;
+      unsubscribe();
     };
-  });
+  }, []);
+
+  // Effect for fetching movies
+  useEffect(() => {
+    getMovies();
+  }, [user]); // Depend on user state to refetch movies when user changes
 
   return (
     <AuthContext.Provider
@@ -53,6 +65,7 @@ export function AuthContextProvider({ children }) {
         signUp,
         user,
         myMovies,
+        setMyMovies,
         logIn,
         logOut,
       }}

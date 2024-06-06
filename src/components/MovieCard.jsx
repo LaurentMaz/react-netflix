@@ -7,7 +7,7 @@ import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 const MovieCard = ({ movie, inAccount }) => {
   const [like, setLike] = useState();
   const [saved, setSaved] = useState();
-  const { user, myMovies } = UserAuth();
+  const { user, myMovies, setMyMovies } = UserAuth();
 
   const checkLike = () => {
     const myMoviesFiltered = myMovies?.filter(
@@ -27,22 +27,31 @@ const MovieCard = ({ movie, inAccount }) => {
     //Supprimer le movie si déjà dans la BDD
     if (myMoviesFiltered?.length > 0) {
       setSaved(false);
-      let myMoviesUpdated = [...myMovies];
-      myMoviesUpdated = myMoviesUpdated.filter(
+      let myMoviesUpdated = myMovies.filter(
         (movieInDB) => !(movieInDB.title === movie.title)
       );
+
+      //Mise à jour du context
+      setMyMovies(myMoviesUpdated);
+
       await updateDoc(movieDocRef, {
         savedMovies: myMoviesUpdated,
       });
     } else {
       setSaved(true);
+
+      const newMovie = {
+        id: movie.id,
+        title: movie.title,
+        img: movie.backdrop_path,
+      };
+
+      //Mise à jour du context
+      setMyMovies((prevMovies) => [...prevMovies, newMovie]);
+
       //Ajouter le movie dans la BDD si pas déjà liké
       await updateDoc(movieDocRef, {
-        savedMovies: arrayUnion({
-          id: movie.id,
-          title: movie.title,
-          img: movie.backdrop_path,
-        }),
+        savedMovies: arrayUnion(newMovie),
       });
     }
   };
