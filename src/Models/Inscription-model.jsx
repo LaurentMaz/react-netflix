@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import InscriptionView from "../Views/Inscription-view";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase.config";
-import { onAuthStateChanged } from "firebase/auth";
 
 const InscriptionModel = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +24,7 @@ const InscriptionModel = () => {
     if (user?.email) {
       navigate("/home"); // Rediriger si l'utilisateur est authentifié
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return (
     <InscriptionView

@@ -17,14 +17,13 @@ export function AuthContextProvider({ children }) {
 
   const getMovies = async () => {
     //Récupération des données en BDD
-    if (user) {
-      try {
-        const docSnap = await getDoc(docRef);
-        const results = docSnap.data()?.savedMovies;
-        setMyMovies(results);
-      } catch (error) {
-        console.error("Failed to fetch movies:", error);
-      }
+
+    try {
+      const docSnap = await getDoc(docRef);
+      const results = docSnap.data()?.savedMovies;
+      setMyMovies(results);
+    } catch (error) {
+      console.error("Failed to fetch movies:", error);
     }
   };
 
@@ -48,7 +47,9 @@ export function AuthContextProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
-
+    if (process.env.NODE_ENV === "production") {
+      console.log("Auth state changed:", user); // Log pour déboguer
+    }
     return () => {
       unsubscribe();
     };
@@ -57,6 +58,10 @@ export function AuthContextProvider({ children }) {
   // Effect for fetching movies
   useEffect(() => {
     getMovies();
+
+    if (process.env.NODE_ENV === "production") {
+      console.log("Fetching movies for user:", user); // Log pour déboguer
+    }
   }, [user]); // Depend on user state to refetch movies when user changes
 
   return (
